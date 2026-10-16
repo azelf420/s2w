@@ -367,9 +367,14 @@
     function peerUp() {
       pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
       pc.onicecandidate = (e) => { if (e.candidate) ws.send(JSON.stringify({ t: 'signal', data: { ice: e.candidate } })); };
+      pc.oniceconnectionstatechange = () => console.log('[net] ice ' + pc.iceConnectionState);
       const wire = (ch) => {
         ch.binaryType = 'arraybuffer';
-        if (ch.label === 'ctl') { ctl = ch; ch.onmessage = (e) => onCtl(e.data); if (ch.readyState === 'open') onConnected(); else ch.onopen = onConnected; }
+        if (ch.label === 'ctl') {
+          ctl = ch; ch.onmessage = (e) => onCtl(e.data);
+          const open = () => { if (!relay) console.log('[net] direct connection'); onConnected(); };
+          if (ch.readyState === 'open') open(); else ch.onopen = open;
+        }
         else { inp = ch; ch.onmessage = (e) => onGamePacket(e.data); }
       };
       if (isHost) {
@@ -377,9 +382,13 @@
         wire(pc.createDataChannel('in', { ordered: false, maxRetransmits: 0 }));
         pc.createOffer().then((o) => pc.setLocalDescription(o)).then(() => ws.send(JSON.stringify({ t: 'signal', data: { sdp: pc.localDescription } })));
       } else pc.ondatachannel = (e) => wire(e.channel);
-      setTimeout(() => { if (!connected && !error) { relay = true; say(L.relay); onConnected(); } }, 8000);
+      setTimeout(() => { if (!connected && !error) { relay = true; console.log('[net] through the room server'); say(L.relay); onConnected(); } }, 8000);
     }
-    async function onSignal(d) {
+    // One setup message at a time, in order: a network address that arrives while the offer or answer is still being
+    // applied would otherwise be refused, and without them the direct connection fails (and play goes through the server).
+    let signals = Promise.resolve();
+    function onSignal(d) { signals = signals.then(() => applySignal(d)).catch((e) => console.log('[net] setup: ' + e)); }
+    async function applySignal(d) {
       if (d.sdp) {
         await pc.setRemoteDescription(d.sdp);
         if (d.sdp.type === 'offer') { await pc.setLocalDescription(await pc.createAnswer()); ws.send(JSON.stringify({ t: 'signal', data: { sdp: pc.localDescription } })); }
