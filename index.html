@@ -13,13 +13,6 @@
          background-size: 300px 200px, 300px 200px, 300px 200px, 300px 200px, 300px 200px, 300px 200px, 100% 100%;
          border-right: 5px ridge #6b5cff; scrollbar-color: #6b5cff #070420; }
   body:not(.n64-panel) #n64 { display: none; }
-  #n64 .logo { text-align: center; font: 900 40px/1 "Arial Black", Impact, sans-serif; letter-spacing: 1px;
-               text-shadow: 3px 3px 0 #000, -1px -1px 0 #000; margin: 2px 0 2px; }
-  #n64 .logo b:nth-child(1) { color: #e3262b; } #n64 .logo b:nth-child(2) { color: #f7c600; }
-  #n64 .logo b:nth-child(3) { color: #1e9b3c; } #n64 .logo b:nth-child(4) { color: #2a5bd7; }
-  #n64 .sub { text-align: center; color: #9ff; font: italic bold 14px "Comic Sans MS", "Comic Sans", cursive; margin-bottom: 6px; }
-  #n64 marquee { display: block; background: #000; color: #0f0; border: 2px inset #888; font: bold 12px "Courier New", monospace;
-                 padding: 2px 0; margin: 6px 0 10px; }
   #n64 fieldset { border: 3px ridge #b9b0ff; margin: 0 0 10px; padding: 6px 8px 8px; background: #0008; }
   #n64 legend { font: bold 13px "Comic Sans MS", "Comic Sans", cursive; color: #ff0; padding: 0 4px; text-shadow: 1px 1px 0 #c00; }
   #n64 table { width: 100%; border-collapse: collapse; }
@@ -39,13 +32,8 @@
   .n64-b3:disabled { cursor: not-allowed; color: #777; background: repeating-linear-gradient(45deg, #333 0 10px, #222 10px 20px);
                      border: 3px outset #555; position: relative; }
   .n64-soon { display: block; margin-top: 2px; color: #ff0; font: bold 11px Verdana, sans-serif; letter-spacing: 1px;
-              animation: n64blink 1s steps(1) infinite; }
-  @keyframes n64blink { 50% { visibility: hidden; } }
-  .n64-new { color: #f0f; font-weight: bold; animation: n64blink .7s steps(1) infinite; }
-  .n64-work { height: 14px; margin: 10px 0 4px; border: 2px solid #000;
-              background: repeating-linear-gradient(-45deg, #000 0 10px, #fc0 10px 20px); animation: n64slide 1s linear infinite;
-              background-size: 28px 28px; }
-  @keyframes n64slide { to { background-position: 28px 0; } }
+              }
+  .n64-new { color: #f0f; font-weight: bold; }
   .n64-count { text-align: center; margin: 6px 0; font-size: 11px; color: #ccc; }
   #n64-visits { display: inline-block; padding: 1px 6px; background: #000; color: #f33; border: 2px inset #555;
                     font: bold 14px "Courier New", monospace; letter-spacing: 2px; }
@@ -58,9 +46,6 @@
 </head><body>
 <button id="n64-open" class="n64-b3" tabindex="-1" onmousedown="event.preventDefault()" onclick="n64Panel(true)">&#9776; <span data-t="panel"></span></button>
 <div id="n64">
-  <div class="logo"><b>N</b><b>6</b><b>4</b><b>!</b></div>
-  <div class="sub" data-t="sub"></div>
-  <marquee scrollamount="4" data-t="marquee"></marquee>
 
   <fieldset><legend>&#9733; <span data-t="controls"></span> &#9733;</legend>
     <table>
@@ -83,7 +68,6 @@
 
   <div class="n64-count"><span data-t="visits1"></span> <span id="n64-visits">000000</span> <span data-t="visits2"></span></div>
 
-  <div class="n64-work"></div>
   <button class="n64-b3" disabled tabindex="-1">&#9673; <span data-t="online"></span><span class="n64-soon" data-t="soon"></span></button>
   <div class="foot"><span class="n64-new" data-t="new"></span> <span data-t="newtext"></span><br><span data-t="rom"></span></div>
 </div>
@@ -91,14 +75,12 @@
   // Texts in the visitor's language: Portuguese on a Portuguese browser, English anywhere else.
   const n64Lang = /^pt/i.test(navigator.language || '') ? 'pt' : 'en';
   const n64Text = {
-    pt: { panel: 'PAINEL', sub: '~*~ STADIUM 2 no seu navegador ~*~',
-          marquee: '*** BEM-VINDO!!! *** JOGUE DIRETO NO NAVEGADOR *** CLIQUE NO JOGO PRA JOGAR ***',
+    pt: { panel: 'PAINEL',
           controls: 'CONTROLES', trigger: 'gatilho', space: 'Espaço', dpad: 'Direcional', stick: 'Analógico',
           options: 'OPÇÕES', full: 'TELA CHEIA', hide: 'ESCONDER PAINEL', visits1: 'Você já entrou aqui', visits2: 'vezes',
           online: 'MODO ONLINE', soon: 'EM BREVE', new: 'NOVO!', newtext: 'batalha de 2 jogadores pela internet em construção',
           rom: 'Traga sua própria ROM. Nenhum arquivo do jogo fica neste site.' },
-    en: { panel: 'PANEL', sub: '~*~ STADIUM 2 in your browser ~*~',
-          marquee: '*** WELCOME!!! *** PLAY RIGHT IN YOUR BROWSER *** CLICK THE GAME TO PLAY ***',
+    en: { panel: 'PANEL',
           controls: 'CONTROLS', trigger: 'trigger', space: 'Space', dpad: 'D-Pad', stick: 'Stick',
           options: 'OPTIONS', full: 'FULLSCREEN', hide: 'HIDE PANEL', visits1: 'You have been here', visits2: 'times',
           online: 'ONLINE MODE', soon: 'COMING SOON', new: 'NEW!', newtext: '2 player battles over the internet under construction',
