@@ -46,11 +46,8 @@
               background: repeating-linear-gradient(-45deg, #000 0 10px, #fc0 10px 20px); animation: n64slide 1s linear infinite;
               background-size: 28px 28px; }
   @keyframes n64slide { to { background-position: 28px 0; } }
-  .n64-badges { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin: 8px 0; }
-  .n64-badge { padding: 2px 4px; font: bold 9px Verdana, sans-serif; color: #fff; border: 2px outset #999; background: #222; }
-  .n64-badge.g { background: #063; } .n64-badge.b { background: #036; } .n64-badge.r { background: #600; }
   .n64-count { text-align: center; margin: 6px 0; font-size: 11px; color: #ccc; }
-  .n64-count span { display: inline-block; padding: 1px 6px; background: #000; color: #f33; border: 2px inset #555;
+  #n64-visits { display: inline-block; padding: 1px 6px; background: #000; color: #f33; border: 2px inset #555;
                     font: bold 14px "Courier New", monospace; letter-spacing: 2px; }
   #n64-open { position: fixed; left: 6px; top: 6px; z-index: 5; display: none; }
   body:not(.n64-panel) #n64-open { display: block; width: auto; }
@@ -59,43 +56,56 @@
                               #n64 { z-index: 6; } }
 </style>
 </head><body>
-<button id="n64-open" class="n64-b3" tabindex="-1" onmousedown="event.preventDefault()" onclick="n64Panel(true)">&#9776; PAINEL</button>
+<button id="n64-open" class="n64-b3" tabindex="-1" onmousedown="event.preventDefault()" onclick="n64Panel(true)">&#9776; <span data-t="panel"></span></button>
 <div id="n64">
   <div class="logo"><b>N</b><b>6</b><b>4</b><b>!</b></div>
-  <div class="sub">~*~ STADIUM 2 no seu navegador ~*~</div>
-  <marquee scrollamount="4">*** BEM-VINDO!!! *** JOGUE DIRETO NO NAVEGADOR *** NÃO É EMULADOR, É RECOMPILAÇÃO *** CLIQUE NO JOGO PRA JOGAR ***</marquee>
+  <div class="sub" data-t="sub"></div>
+  <marquee scrollamount="4" data-t="marquee"></marquee>
 
-  <fieldset><legend>&#9733; CONTROLES &#9733;</legend>
+  <fieldset><legend>&#9733; <span data-t="controls"></span> &#9733;</legend>
     <table>
       <tr><td><span class="n64-btn a">A</span></td><td><kbd>X</kbd></td></tr>
       <tr><td><span class="n64-btn b">B</span></td><td><kbd>Z</kbd></td></tr>
       <tr><td><span class="n64-btn start">START</span></td><td><kbd>Enter</kbd></td></tr>
-      <tr><td><span class="n64-btn gray">Z</span> gatilho</td><td><kbd>Shift</kbd> <kbd>Espaço</kbd></td></tr>
+      <tr><td><span class="n64-btn gray">Z</span> <span data-t="trigger"></span></td><td><kbd>Shift</kbd> <kbd data-t="space"></kbd></td></tr>
       <tr><td><span class="n64-btn gray">L</span> <span class="n64-btn gray">R</span></td><td><kbd>Q</kbd> <kbd>E</kbd></td></tr>
       <tr><td><span class="n64-btn c">C&#9650;</span> <span class="n64-btn c">C&#9660;</span></td><td><kbd>I</kbd> <kbd>K</kbd></td></tr>
       <tr><td><span class="n64-btn c">C&#9664;</span> <span class="n64-btn c">C&#9654;</span></td><td><kbd>J</kbd> <kbd>L</kbd></td></tr>
-      <tr><td>Direcional</td><td><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8592;</kbd><kbd>&#8594;</kbd></td></tr>
-      <tr><td>Analógico</td><td><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></td></tr>
+      <tr><td data-t="dpad"></td><td><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8592;</kbd><kbd>&#8594;</kbd></td></tr>
+      <tr><td data-t="stick"></td><td><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></td></tr>
     </table>
   </fieldset>
 
-  <fieldset><legend>&#9733; OPÇÕES &#9733;</legend>
-    <button class="n64-b3" tabindex="-1" onmousedown="event.preventDefault()" onclick="n64Full()">&#9974; TELA CHEIA</button>
-    <button class="n64-b3" tabindex="-1" onmousedown="event.preventDefault()" onclick="n64Panel(false)">&#9668; ESCONDER PAINEL</button>
+  <fieldset><legend>&#9733; <span data-t="options"></span> &#9733;</legend>
+    <button class="n64-b3" tabindex="-1" onmousedown="event.preventDefault()" onclick="n64Full()">&#9974; <span data-t="full"></span></button>
+    <button class="n64-b3" tabindex="-1" onmousedown="event.preventDefault()" onclick="n64Panel(false)">&#9668; <span data-t="hide"></span></button>
   </fieldset>
 
-  <div class="n64-count">Você já entrou aqui <span id="n64-visits">000000</span> vezes</div>
-  <div class="n64-badges">
-    <span class="n64-badge g">FEITO NO BLOCO DE NOTAS</span><span class="n64-badge b">800x600</span>
-    <span class="n64-badge r">WEBGPU INSIDE</span><span class="n64-badge">NÃO É EMULADOR</span>
-  </div>
+  <div class="n64-count"><span data-t="visits1"></span> <span id="n64-visits">000000</span> <span data-t="visits2"></span></div>
 
   <div class="n64-work"></div>
-  <button class="n64-b3" disabled tabindex="-1">&#9673; MODO ONLINE<span class="n64-soon">EM BREVE</span></button>
-  <div class="foot"><span class="n64-new">NOVO!</span> batalha de 2 jogadores pela internet em construção<br>
-    Traga sua própria ROM. Nenhum arquivo do jogo fica neste site.</div>
+  <button class="n64-b3" disabled tabindex="-1">&#9673; <span data-t="online"></span><span class="n64-soon" data-t="soon"></span></button>
+  <div class="foot"><span class="n64-new" data-t="new"></span> <span data-t="newtext"></span><br><span data-t="rom"></span></div>
 </div>
 <script>
+  // Texts in the visitor's language: Portuguese on a Portuguese browser, English anywhere else.
+  const n64Lang = /^pt/i.test(navigator.language || '') ? 'pt' : 'en';
+  const n64Text = {
+    pt: { panel: 'PAINEL', sub: '~*~ STADIUM 2 no seu navegador ~*~',
+          marquee: '*** BEM-VINDO!!! *** JOGUE DIRETO NO NAVEGADOR *** CLIQUE NO JOGO PRA JOGAR ***',
+          controls: 'CONTROLES', trigger: 'gatilho', space: 'Espaço', dpad: 'Direcional', stick: 'Analógico',
+          options: 'OPÇÕES', full: 'TELA CHEIA', hide: 'ESCONDER PAINEL', visits1: 'Você já entrou aqui', visits2: 'vezes',
+          online: 'MODO ONLINE', soon: 'EM BREVE', new: 'NOVO!', newtext: 'batalha de 2 jogadores pela internet em construção',
+          rom: 'Traga sua própria ROM. Nenhum arquivo do jogo fica neste site.' },
+    en: { panel: 'PANEL', sub: '~*~ STADIUM 2 in your browser ~*~',
+          marquee: '*** WELCOME!!! *** PLAY RIGHT IN YOUR BROWSER *** CLICK THE GAME TO PLAY ***',
+          controls: 'CONTROLS', trigger: 'trigger', space: 'Space', dpad: 'D-Pad', stick: 'Stick',
+          options: 'OPTIONS', full: 'FULLSCREEN', hide: 'HIDE PANEL', visits1: 'You have been here', visits2: 'times',
+          online: 'ONLINE MODE', soon: 'COMING SOON', new: 'NEW!', newtext: '2 player battles over the internet under construction',
+          rom: 'Bring your own ROM. No game files are hosted on this site.' },
+  }[n64Lang];
+  document.documentElement.lang = n64Lang === 'pt' ? 'pt-BR' : 'en';
+  document.querySelectorAll('[data-t]').forEach((e) => { e.textContent = n64Text[e.dataset.t]; });
   // Panel behaviour: show/hide (the canvas takes the freed width; SDL follows the window's resize), fullscreen, and a
   // visit count kept in this browser only. Nothing here takes the keyboard from the game.
   function n64Panel(on) {
